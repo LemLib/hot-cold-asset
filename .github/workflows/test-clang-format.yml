@@ -15,6 +15,6 @@ jobs:
     - uses: actions/checkout@v2
     - uses: DoozyX/clang-format-lint-action@v0.18
       with:
-        source: './include/hot-cold-asset'
+        source: './include/hot-cold-asset/asset.hpp'
         extensions: 'hpp,cpp'
         clangFormatVersion: 18

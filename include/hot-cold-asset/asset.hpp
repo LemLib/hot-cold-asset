@@ -16,7 +16,7 @@ typedef struct __attribute__((__packed__)) _asset {
 
 #define ASSET(x)                                                               \
   static_assert(!__builtin_strcmp(__FUNCTION__, "top level"),                  \
-    "Cannot use ASSET inside a function!");                                    \
+                "Cannot use ASSET inside a function!");                        \
   extern "C" {                                                                 \
   extern uint8_t _binary_static_##x##_start[], _binary_static_##x##_size[];    \
   static asset x = {_binary_static_##x##_start,                                \
@@ -25,7 +25,7 @@ typedef struct __attribute__((__packed__)) _asset {
 
 #define ASSET_LIB(x)                                                           \
   static_assert(!__builtin_strcmp(__FUNCTION__, "top level"),                  \
-    "Cannot use ASSET_LIB inside a function!");                                \
+                "Cannot use ASSET_LIB inside a function!");                    \
   extern "C" {                                                                 \
   extern uint8_t _binary_static_lib_##x##_start[],                             \
       _binary_static_lib_##x##_size[];                                         \

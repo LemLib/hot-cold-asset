@@ -17,7 +17,7 @@ EXTRA_CFLAGS=
 EXTRA_CXXFLAGS=
 
 # Set to 1 to enable hot/cold linking
-USE_PACKAGE:=1
+USE_PACKAGE:=0
 
 # Add libraries you do not wish to include in the cold image here
 # EXCLUDE_COLD_LIBRARIES:= $(FWDIR)/your_library.a
@@ -28,7 +28,7 @@ IS_LIBRARY:=1
 # Be sure that your header files are in the include directory inside of a folder with the
 # same name as what you set LIBNAME to below.
 LIBNAME:=hot-cold-asset
-VERSION:=1.0.1
+VERSION:=1.0.2
 # EXCLUDE_SRC_FROM_LIB= $(SRCDIR)/unpublishedfile.c
 # this line excludes opcontrol.c and similar files
 EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/main,$(foreach cext,$(CEXTS),$(file).$(cext)) $(foreach cxxext,$(CXXEXTS),$(file).$(cxxext)))
@@ -38,9 +38,20 @@ EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/main,$(foreach cext,$(CEXTS),$(f
 # that are in the directory include/LIBNAME
 TEMPLATE_FILES=$(INCDIR)/hot-cold-asset/asset.hpp
 
-.DEFAULT_GOAL=quick
+# Automatically create bin dir when building (this causes issues otherwise idk)
+.DEFAULT_GOAL=quick_and_bin
+.PHONY: quick_and_bin
+quick_and_bin: quick $(BINDIR)
 
 ################################################################################
 ################################################################################
 ########## Nothing below this line should be edited by typical users ###########
 -include ./common.mk
+
+# Do not include the .a file in the template zip as the template doesn't have any
+# source code to put in there.
+ifneq ($(filter template,$(MAKECMDGOALS)),)
+$(shell rm $(LIBAR))
+$(LIBAR):
+	@echo Not making $@ as it is unnecessary
+endif
